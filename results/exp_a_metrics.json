@@ -1,0 +1,138 @@
+{
+  "classical_baseline": {
+    "model_id": "classical_baseline",
+    "model_name": "Classical Baseline",
+    "total_params": 54929,
+    "is_adaptive": false,
+    "notes": "Pure classical feedforward, 1x1 conv fusion bottleneck",
+    "epochs": [
+      {
+        "epoch": 1,
+        "train_bce": 0.23018476979373254,
+        "val_bce": 0.6193435887495676,
+        "val_dice": 0.7431564297940996,
+        "val_iou": 0.5919526815414429,
+        "mean_alpha_train": 0.0,
+        "mean_alpha_val": 0.0,
+        "runtime_seconds": 80.54983615875244
+      },
+      {
+        "epoch": 2,
+        "train_bce": 0.14308080189440348,
+        "val_bce": 1.8022862010531955,
+        "val_dice": 0.6138745579454634,
+        "val_iou": 0.44321107036537594,
+        "mean_alpha_train": 0.0,
+        "mean_alpha_val": 0.0,
+        "runtime_seconds": 94.40220046043396
+      }
+    ],
+    "total_runtime_seconds": 174.9520366191864,
+    "final_val_dice": 0.6138745579454634,
+    "final_val_iou": 0.44321107036537594,
+    "final_val_bce": 1.8022862010531955,
+    "final_mean_alpha": 0.0
+  },
+  "fixed_cq": {
+    "model_id": "fixed_cq",
+    "model_name": "Fixed CQ (100% Q)",
+    "total_params": 201889,
+    "is_adaptive": false,
+    "notes": "100% routed through 8-qubit quantum bottleneck (alpha=1.0)",
+    "epochs": [
+      {
+        "epoch": 1,
+        "train_bce": 0.3662715891044434,
+        "val_bce": 0.24125166402922738,
+        "val_dice": 0.8851890861988068,
+        "val_iou": 0.7944964898957146,
+        "mean_alpha_train": 1.0,
+        "mean_alpha_val": 1.0,
+        "runtime_seconds": 110.77280974388123
+      },
+      {
+        "epoch": 2,
+        "train_bce": 0.2354303682095384,
+        "val_bce": 0.21124014341168934,
+        "val_dice": 0.8991071416272057,
+        "val_iou": 0.8170608811908298,
+        "mean_alpha_train": 1.0,
+        "mean_alpha_val": 1.0,
+        "runtime_seconds": 121.57626295089722
+      }
+    ],
+    "total_runtime_seconds": 232.34907269477844,
+    "final_val_dice": 0.8991071416272057,
+    "final_val_iou": 0.8170608811908298,
+    "final_val_bce": 0.21124014341168934,
+    "final_mean_alpha": 1.0
+  },
+  "adaptive_cc": {
+    "model_id": "adaptive_cc",
+    "model_name": "Adaptive CC Surrogate",
+    "total_params": 58234,
+    "is_adaptive": true,
+    "notes": "Adaptive router allocating between two capacity-matched classical surrogates (z_C1 and z_C2)",
+    "epochs": [
+      {
+        "epoch": 1,
+        "train_bce": 0.30072207432495407,
+        "val_bce": 2.647356073061625,
+        "val_dice": 0.6172678007019891,
+        "val_iou": 0.446766530474027,
+        "mean_alpha_train": 0.49990489793150394,
+        "mean_alpha_val": 0.5509536465009054,
+        "runtime_seconds": 108.12280607223511
+      },
+      {
+        "epoch": 2,
+        "train_bce": 0.12865705737104155,
+        "val_bce": 2.1572033365567527,
+        "val_dice": 0.6194693545500437,
+        "val_iou": 0.44907962282498676,
+        "mean_alpha_train": 0.5000752937303831,
+        "mean_alpha_val": 0.49272128608491683,
+        "runtime_seconds": 108.53290390968323
+      }
+    ],
+    "total_runtime_seconds": 216.65570998191833,
+    "final_val_dice": 0.6194693545500437,
+    "final_val_iou": 0.44907962282498676,
+    "final_val_bce": 2.1572033365567527,
+    "final_mean_alpha": 0.49272128608491683
+  },
+  "adaptive_cq": {
+    "model_id": "adaptive_cq",
+    "model_name": "Adaptive CQ (Q-FUSION)",
+    "total_params": 58234,
+    "is_adaptive": true,
+    "notes": "Adaptive router allocating between classical surrogate z_C and 8-qubit quantum branch z_Q",
+    "epochs": [
+      {
+        "epoch": 1,
+        "train_bce": 0.3032602659643513,
+        "val_bce": 2.663814147313436,
+        "val_dice": 0.6204596824116178,
+        "val_iou": 0.4501110215981801,
+        "mean_alpha_train": 0.4998126891377854,
+        "mean_alpha_val": 0.5470007922914293,
+        "runtime_seconds": 116.40938591957092
+      },
+      {
+        "epoch": 2,
+        "train_bce": 0.1277185711142135,
+        "val_bce": 2.444593389829,
+        "val_dice": 0.6200644705030653,
+        "val_iou": 0.44970405101776123,
+        "mean_alpha_train": 0.49951589270813823,
+        "mean_alpha_val": 0.4774203697840373,
+        "runtime_seconds": 116.09295415878296
+      }
+    ],
+    "total_runtime_seconds": 232.50234007835388,
+    "final_val_dice": 0.6200644705030653,
+    "final_val_iou": 0.44970405101776123,
+    "final_val_bce": 2.444593389829,
+    "final_mean_alpha": 0.4774203697840373
+  }
+}

@@ -1,0 +1,28 @@
+# Python & Virtual Environments
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.ipynb_checkpoints
+
+# Large Datasets & Archives (GitHub blocks files > 100MB)
+Task1.zip
+data/
+*.nii
+*.nii.gz
+*.zip
+*.tar.gz
+
+# Checkpoints & Model Weights
+checkpoints/*.pt
+*.pt
+*.pth
+*.onnx
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
