@@ -35,10 +35,16 @@ def train_adaptive_hybrid(epochs=1, batch_size=2, lr=1e-3, seed=42, lambda_init=
     set_seed(seed)
     
     # 1. Device configuration
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"[Device] Utilizing: {device}")
     if torch.cuda.is_available():
+        device = torch.device("cuda")
+        print(f"[Device] Utilizing: {device}")
         print(f"[GPU] Model: {torch.cuda.get_device_name(0)}")
+    elif torch.backends.mps.is_available():
+        device = torch.device("mps")
+        print(f"[Device] Utilizing: {device} (Apple Silicon MPS)")
+    else:
+        device = torch.device("cpu")
+        print(f"[Device] Utilizing: {device}")
         
     # 2. Dataset & Dataloader
     dataset = SynthRADDataset(data_dir="data", split="train", transform=get_transforms())

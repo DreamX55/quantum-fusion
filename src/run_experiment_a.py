@@ -129,8 +129,16 @@ def run_experiment_a(epochs=2, batch_size=2, lr=1e-3, seed=42):
     print("=" * 80)
     
     set_seed(seed)
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"[Device] Utilizing: {device} ({torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU'})")
+    if torch.cuda.is_available():
+        device = torch.device("cuda")
+        device_name = torch.cuda.get_device_name(0)
+    elif torch.backends.mps.is_available():
+        device = torch.device("mps")
+        device_name = "Apple Silicon (MPS)"
+    else:
+        device = torch.device("cpu")
+        device_name = "CPU"
+    print(f"[Device] Utilizing: {device} ({device_name})")
     
     # 1. Dataset setup (Strictly identical split across all models)
     train_dataset = SynthRADDataset(data_dir="data", split="train", seed=seed, val_ratio=0.2, transform=get_transforms())

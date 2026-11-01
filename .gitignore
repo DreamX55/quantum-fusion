@@ -25,4 +25,9 @@ checkpoints/*.pt
 .vscode/
 .idea/
 .DS_Store
+._*
 Thumbs.db
+
+# Windows Legacy Wrappers
+*.bat
+*.cmd

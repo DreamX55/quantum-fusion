@@ -66,9 +66,9 @@ class QuantumBranchBottleneck(nn.Module):
         
         q_out_list = []
         for i in range(batch_size):
-            q_out_list.append(torch.stack(reuploading_quantum_circuit(x_cpu[i], w_cpu)))
+            q_out_list.append(torch.stack(reuploading_quantum_circuit(x_cpu[i], w_cpu)).to(dtype=x.dtype))
             
-        q_out = torch.stack(q_out_list).to(device=orig_device, dtype=x.dtype)
+        q_out = torch.stack(q_out_list).to(device=orig_device)
         return q_out
 
 class AdaptiveCQRouter(nn.Module):
