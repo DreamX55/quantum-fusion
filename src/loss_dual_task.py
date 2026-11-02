@@ -79,9 +79,15 @@ class DualTaskLoss(nn.Module):
         l_cls = self.cls_criterion(cls_pred, cls_target)
         
         # 2. Segmentation Loss (BCE + Soft Dice)
-        l_bce = self.bce(seg_pred, seg_target)
-        l_dice = self.soft_dice(seg_pred, seg_target)
-        l_seg = l_bce + l_dice
+        if self.lambda_seg > 0.0:
+            l_bce = self.bce(seg_pred, seg_target)
+            l_dice = self.soft_dice(seg_pred, seg_target)
+            l_seg = l_bce + l_dice
+        else:
+            with torch.no_grad():
+                l_bce = self.bce(seg_pred, seg_target)
+                l_dice = self.soft_dice(seg_pred, seg_target)
+                l_seg = l_bce + l_dice
         
         # 3. Annealed Anti-Collapse Penalty
         if alpha is not None:
@@ -92,6 +98,9 @@ class DualTaskLoss(nn.Module):
             anti_collapse = torch.tensor(0.0, device=seg_pred.device)
             
         # 4. Total Multi-Task Loss
-        l_total = l_cls + (self.lambda_seg * l_seg) + anti_collapse
+        if self.lambda_seg > 0.0:
+            l_total = l_cls + (self.lambda_seg * l_seg) + anti_collapse
+        else:
+            l_total = l_cls + anti_collapse
         
         return l_total, l_cls, l_seg, l_bce, l_dice, penalty, self.lambda_t
