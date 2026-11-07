@@ -1,0 +1,30 @@
+\section{Experimental Setup}
+\label{sec:experimental_setup}
+
+\subsection{Benchmark Cohorts}
+
+\subsubsection{BraTS2021 Multi-Sequence MRI Benchmark}
+To evaluate multimodal representation scaling across $M \in \{1, 2, 3, 4\}$, we utilize a standardized cohort of 150 subjects from the Brain Tumor Segmentation (BraTS 2021) challenge \cite{baid2021rsna,menze2014multimodal}. 
+Each subject comprises four co-registered 3D MRI volumes: native T1 ($t_1$), T1-weighted contrast-enhanced ($t_{1\text{ce}}$), T2-weighted ($t_2$), and Fluid-Attenuated Inversion Recovery ($flair$). 
+Volumes are partitioned into 120 training subjects and 30 held-out validation subjects using deterministic random splitting (seed 42). 
+All volumes undergo channel-wise Z-score normalization on brain tissue regions and are resampled to an isotropic spatial resolution of $64 \times 64 \times 64$ voxels. 
+Ground-truth annotations correspond to binary Whole Tumour (WT) delineations incorporating necrotic core, active enhancing tumour, and peritumoural edema.
+
+\subsubsection{SynthRAD2023 Cross-Modality Cohort}
+To evaluate cross-modality learning between distinct physical acquisition domains, we benchmark on 181 subjects from the SynthRAD2023 Task 1 Brain dataset \cite{thummerer2023synthrad2023}. 
+The cohort provides paired structural MRI and computed tomography (CT) scans partitioned into 145 training patients and 36 validation patients. 
+Volumes are normalized and resampled to $64 \times 64 \times 64$ resolution.
+
+\subsection{Standardized Model Configurations and Capacity Parity}
+All evaluated architectures share an identical 3D CNN encoder and decoder topology. 
+Model capacity is standardized to guarantee exact 0.0000\% parameter parity across experimental pairs:
+\begin{itemize}
+    \item \textbf{BraTS2021 Architectures:} `BraTSAdaptiveCQ` (37,146 parameters) and `BraTSAdaptiveCC` (37,146 parameters, 0.0000\% capacity variance); `BraTSFixedCQ` (36,577 parameters, $\alpha=1.0$) and `BraTSClassicalBaseline` (36,577 parameters, $\alpha=0.0$).
+    \item \textbf{SynthRAD2023 Architectures:} `AdaptiveCQStandardized` (58,234 parameters) and `AdaptiveCCStandardized` (58,234 parameters, 0.0000\% capacity variance); `FixedCQStandardized` (57,153 parameters) and `ClassicalBaselineStandardized` (57,153 parameters).
+\end{itemize}
+
+\subsection{Training Hyperparameters and Hardware Runtime}
+Models are optimized using Adam ($\text{lr} = 5 \times 10^{-4}$, $\text{weight\_decay} = 10^{-4}$) with a cosine annealing learning rate scheduler ($\eta_{\min} = 10^{-6}$, $T_{\max} = 20$). 
+Training runs for up to 20 epochs with early stopping governed by a patience threshold of 5 epochs monitored on validation DSC. 
+Batch size is fixed to $B=2$. 
+All experiments were executed on Apple Silicon hardware utilizing the Metal Performance Shaders (MPS) backend in PyTorch, paired with the PennyLane autograd CPU bridge for quantum statevector and density-matrix simulations.

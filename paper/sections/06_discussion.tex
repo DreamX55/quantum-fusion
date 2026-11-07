@@ -1,0 +1,34 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Mechanisms of Multimodal Interference and Feature Dilution}
+The empirical results across the BraTS2021 modality scaling matrix ($M \in \{1, 2, 3, 4\}$) offer critical mechanistic insights into multimodal representation learning. 
+At $M=3$ (T1, T2, FLAIR), all capacity-matched models achieve stable segmentation performance (0.6977--0.7078 DSC). 
+However, when the fourth modality ($t_{1\text{ce}}$, gadolinium contrast enhancement) is introduced at $M=4$, `BraTSClassicalBaseline` undergoes a severe performance drop to 0.6536 DSC ($-4.41\%$ loss, with early stopping triggered at Epoch 4). 
+Under tight parameter budgets, direct classical pooling across four distinct physical intensity distributions induces feature saturation and gradient interference: the high-intensity enhancing tumour core in $t_{1\text{ce}}$ conflicts with the fluid-attenuated edema representations in FLAIR and tissue contrast in T1/T2. 
+In contrast, `BraTSAdaptiveCQ` completely resists this collapse (0.7015 DSC, +4.79\% advantage over classical baseline). 
+The gating router dynamically rebalances representation allocation to $\bar{\alpha} = 0.4883$, demonstrating that hybrid adaptive allocation acts as an architectural firewall against cross-modal feature dilution.
+
+\subsection{FiLM Modulation and NISQ Noise Absorption}
+Our experiments under open-system gate depolarizing noise ($p \in [0.000, 0.050]$) clarify how classical-quantum hybrid networks behave under hardware degradation. 
+In `FixedCQ`, because 100\% of the latent bottleneck flows through the quantum circuit, increasing depolarizing noise attenuates Pauli-Z expectation values towards zero ($\langle Z_i \rangle \to 0$), resulting in a monotonic loss of $-0.32\%$ DSC. 
+In `AdaptiveCQ`, the parallel classical surrogate branch $z_C$ acts as an uncorrupted physical buffer, restricting zero-shot degradation to $-0.01\%$ DSC across the entire noise regime. 
+
+Furthermore, our analysis explains why `FixedCQ` does not suffer total failure under depolarizing noise:
+In the spatial modulation layer $F' = \gamma(z_Q) \odot F + \beta(z_Q)$, the linear projection heads ($\text{Linear}_{8 \to 32}$) possess learnable bias vectors $\beta_0, \gamma_0$. 
+When depolarizing noise contracts $\langle Z_i \rangle \to 0$, the network absorbs this signal attenuation into its linear bias parameters, allowing the downstream 3D CNN decoder (17,521 parameters) to preserve baseline spatial reconstruction. 
+This demonstrates that in FiLM-modulated hybrid networks, the classical decoder provides inherent structural stabilization against quantum hardware errors.
+
+\subsection{Resolving the Three Architectural Pitfalls}
+This study resolves the three core failure modes that historically undermined claims in hybrid medical QML:
+\begin{enumerate}
+    \item \textbf{Classical Collapse:} In unregularized hybrid networks, classical layers provide smoother gradients with larger magnitudes, causing routing gates to settle permanently at $\alpha = 0$. By introducing piecewise linear annealed regularization ($\lambda(t)(\bar{\alpha}-0.5)^2$), Q-FUSION enforces bidirectional exploration during early epochs, stabilizing $\bar{\alpha}$ between $0.47$ and $0.52$.
+    \item \textbf{Spatial Reconstruction Paradox:} Bypassing high-capacity 200,000-parameter unflattening layers, our 576-parameter FiLM module proves that compact 8-dimensional quantum states can effectively modulate 3D spatial feature maps without sacrificing boundary fidelity.
+    \item \textbf{Classical Control Parity:} By evaluating an exact 24-parameter capacity-matched classical surrogate (`AdaptiveCC`, 0.0000\% capacity variance), we ensure that reported gains are not artifacts of parameter inflation.
+\end{enumerate}
+
+\subsection{Non-Hype Boundaries and Limitations}
+In accordance with ethical scientific reporting, we explicitly delimit the scope of our findings:
+First, we do not claim unconditional quantum supremacy or exponential speedups over unconstrained classical models. Our contribution demonstrates that \textit{under an identical, constrained parameter budget, adaptive classical-quantum allocation outperforms rigid quantum designs and mitigates cross-modal interference}.
+Second, we do not claim that Q-FUSION creates fault-tolerant quantum hardware or solves physical decoherence. Rather, we demonstrate that adaptive routing provides architectural resilience against NISQ noise by dynamically adjusting representation weights.
+Finally, all quantum simulations were evaluated on statevector and density-matrix emulators. Validation on physical superconducting transmon or trapped-ion hardware across multi-patient cohorts remains an important direction for future investigation.

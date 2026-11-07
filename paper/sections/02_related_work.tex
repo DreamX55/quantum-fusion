@@ -1,0 +1,27 @@
+\section{Related Work}
+\label{sec:related_work}
+
+\subsection{Quantum Machine Learning and Variational Circuits}
+Parameterized quantum circuits (PQCs) represent the predominant approach for implementing machine learning models on near-term NISQ hardware \cite{cerezo2021variational,preskill2018quantum}. 
+In variational quantum classifiers, classical data vectors are mapped into quantum Hilbert spaces using non-linear feature maps, such as angle embedding or amplitude embedding \cite{schuld2021machine}. 
+The quantum state is subsequently transformed via parameterized single-qubit rotations and multi-qubit entangling operations (e.g., CNOT or CZ gates) before terminal measurement of Pauli observables yields classical expectation values. 
+P{\'e}rez-Salinas et al. \cite{perez2020data} introduced the data re-uploading paradigm, demonstrating that interleaving data encoding layers with parameterized unitary operations dramatically expands circuit expressivity without requiring exponential qubit scaling. 
+However, training deep variational circuits remains constrained by barren plateaus---regions in the parameter space where cost function gradients vanish exponentially with system size \cite{mcclean2018barren}---and noise-induced barren plateaus arising from environmental decoherence \cite{wang2021noise}.
+
+\subsection{Hybrid Classical-Quantum Architectures in Medical Imaging}
+Recent efforts have explored hybrid models combining classical convolutional neural networks (CNNs) with quantum bottlenecks for 2D and 3D medical image segmentation and classification \cite{bergholm2018pennylane}. 
+In typical hybrid pipelines, classical encoders compress volumetric inputs down to low-dimensional latent vectors, which are then processed by a quantum circuit before entering a task-specific head. 
+A recurring vulnerability across existing literature is the lack of parameter-matched classical controls. 
+When a quantum circuit is evaluated without comparison against an equally parameterized classical nonlinear transformation, reported performance gains cannot be rigorously isolated to quantum representation properties rather than arbitrary hyperparameter tuning. 
+Furthermore, static fusion mechanisms (such as fixed concatenation or static averaging) fail to account for heteroskedastic noise and varying information density across different patient scans.
+
+\subsection{Multimodal Representation and Feature Modulation}
+In neuro-oncology, standard clinical imaging protocols acquire multiple complementary modalities \cite{menze2014multimodal,baid2021rsna}. 
+For instance, T1-weighted MRI provides high structural contrast, T2-weighted and FLAIR sequences delineate edema and peritumoural infiltration, and T1-weighted contrast-enhanced (T1ce) scans highlight hypervascular active tumour regions. 
+Combining multiple volumetric modalities introduces the challenge of modality interference: as supplementary input channels are incorporated into a fixed-capacity network, redundant or conflicting feature distributions can dilute salient anatomical signals. 
+To integrate conditioning signals without unflattening low-dimensional vectors into spatial volumes, Feature-wise Linear Modulation (FiLM) \cite{perez2018film} applies affine transformations directly to intermediate convolutional feature maps:
+\begin{equation}
+    F' = \gamma(z) \odot F + \beta(z)
+\end{equation}
+where $\gamma$ and $\beta$ generate channel-wise scaling and shifting vectors based on a conditioning representation $z$. 
+FiLM has been successfully applied to visual reasoning and conditional generation; in this work, we demonstrate its utility as a mathematical bridge connecting compact quantum representations with high-resolution 3D convolutional feature maps.

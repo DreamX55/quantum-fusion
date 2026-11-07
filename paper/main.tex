@@ -1,0 +1,52 @@
+\documentclass[sn-mathphys,Numbered]{sn-jnl}
+
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{manyfoot}
+
+\begin{document}
+
+\title[Q-FUSION: Adaptive Classical-Quantum Fusion]{Q-FUSION: Adaptive Classical-Quantum Representation Allocation under Severe Resource Constraints for Multimodal Brain Tumour Segmentation}
+
+\author*[1]{\fnm{Jonath} \sur{Jimmi}}\email{jonath.jimmi@learner.manipal.edu}
+\author[1]{\fnm{Co-Author} \sur{Placeholder}}\email{coauthor@placeholder.edu}
+
+\affil*[1]{\orgdiv{Department of Information Technology}, \orgname{Manipal Institute of Technology Bengaluru, Manipal Academy of Higher Education}, \orgaddress{\city{Bengaluru}, \postcode{560064}, \state{Karnataka}, \country{India}}}
+
+\abstract{
+Hybrid classical-quantum machine learning (QML) models for medical image analysis frequently confront three fundamental bottlenecks: classical gradient collapse where gating routers degenerate into purely classical pathways, the spatial reconstruction paradox where severe quantum latent constraints destroy high-resolution anatomical boundaries, and the absence of parameter-matched classical controls. 
+In this work, we present Q-FUSION, an adaptive classical-quantum architecture designed to operate under strict latent-dimension and variational circuit constraints. 
+To resolve classical collapse, we introduce an annealed regularized routing objective that balances early quantum-classical pathway exploration before converging to sample-dependent allocation. 
+To resolve the spatial reconstruction paradox, we formulate quantum-conditioned spatial modulation via Feature-wise Linear Modulation (FiLM), allowing compact 8-dimensional quantum state measurements to modulate high-resolution 3D convolutional feature maps without high-dimensional unflattening layers. 
+To eliminate parameter count confounders, all quantum variational circuits are paired with capacity-matched classical surrogate transformations achieving strict 0.0000\% capacity variance.
+We evaluate Q-FUSION across two cohorts: 150 patients from the multi-sequence BraTS2021 benchmark across one to four physical imaging sequences (T1, T1ce, T2, FLAIR) and 181 patients from the SynthRAD2023 cross-modality benchmark (MRI and CT). 
+On BraTS2021, when input complexity expands to full quad-modal imaging ($M=4$), classical baseline pooling degrades by 4.41\% in Dice Similarity Coefficient (DSC) due to cross-modal feature dilution, whereas adaptive routing maintains 0.7015 DSC (+4.79\% over the classical baseline) through dynamic representation reallocation ($\bar{\alpha} = 0.4883$). 
+Under multi-seed evaluation on SynthRAD2023, adaptive routing achieves a +2.47\% mean DSC advantage over rigid quantum fusion ($0.8039 \pm 0.0945$ vs. $0.7792 \pm 0.1011$). 
+Furthermore, under simulated physical gate depolarizing noise ($p \in [0.000, 0.050]$), adaptive routing limits zero-shot degradation to 0.01\% DSC compared to a monotonic 0.32\% loss in rigid quantum architectures. 
+Our findings demonstrate that adaptive classical-quantum routing provides architectural resilience against cross-modal interference and NISQ hardware noise under identical resource constraints.
+}
+
+\keywords{Quantum Machine Learning, Multimodal Medical Imaging, Brain Tumour Segmentation, Adaptive Routing, FiLM Modulation, NISQ Fault-Resilience}
+
+\maketitle
+
+\input{sections/01_introduction}
+\input{sections/02_related_work}
+\input{sections/03_methodology}
+\input{sections/04_experimental_setup}
+\input{sections/05_results}
+\input{sections/06_discussion}
+\input{sections/07_conclusion}
+
+\bmhead{Acknowledgments}
+The authors acknowledge the SynthRAD2023 and RSNA-ASNR-MICCAI BraTS2021 challenge consortia for providing the open-access volumetric cohorts utilized in this research.
+
+\bibliography{references}
+
+\end{document}

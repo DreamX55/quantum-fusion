@@ -1,0 +1,30 @@
+\section{Introduction}
+\label{sec:introduction}
+
+Variational quantum algorithms and hybrid quantum-classical neural networks have emerged as candidate frameworks for extracting complex representations from high-dimensional data \cite{cerezo2021variational,schuld2021machine}. 
+In medical imaging, multimodal volumetric acquisitions---such as multi-parametric magnetic resonance imaging (MRI) and computed tomography (CT)---provide complementary tissue properties indispensable for accurate diagnosis and tumour delineation \cite{menze2014multimodal,thummerer2023synthrad2023}. 
+However, deploying parameterised quantum circuits (PQCs) within 3D medical vision pipelines exposes severe structural limitations. 
+Contemporary noisy intermediate-scale quantum (NISQ) devices restrict processing to modest qubit counts ($N \le 12$) and shallow circuit depths ($L \le 5$) to avoid unmitigated decoherence and barren plateaus \cite{preskill2018quantum,mcclean2018barren,wang2021noise}.
+
+When a high-dimensional 3D medical volume is compressed to fit the narrow input bandwidth of a quantum circuit, two competing failures typically manifest. 
+First, if the network attempts to reconstruct voxel-level segmentations directly from low-dimensional quantum state measurements, fine boundary information is irreversibly destroyed---a phenomenon we define as the \textit{spatial reconstruction paradox}. 
+Prior works frequently circumvented this issue by inserting high-capacity classical projection layers (often exceeding 200,000 parameters) after the quantum circuit. 
+Such designs obscure whether reported performance gains originate from quantum representation utility or simply unconstrained classical capacity.
+
+Second, when classical and quantum branches are fused through fixed, static combination ratios (e.g., 50/50 concatenation), optimization dynamics frequently degrade. 
+Classical neural network layers propagate smooth, high-magnitude gradients, whereas quantum expectation measurements exhibit higher variance and susceptibility to hardware noise. 
+In unregularized gating schemes, the routing mechanism rapidly degenerates to 100\% classical processing and 0\% quantum processing---a failure mode termed \textit{classical collapse}. 
+Conversely, rigid 100\% quantum processing forces all representations through noisy, restricted quantum bottlenecks, degrading performance when input dimensionality or modality complexity increases.
+
+In this work, we propose \textbf{Q-FUSION}, an adaptive classical-quantum fusion framework designed to operate under strict parameter and quantum-resource constraints. 
+Rather than claiming unconditional quantum computational advantage, we investigate a concrete scientific hypothesis: 
+\textit{Can a dynamic, trainable gating router learn to allocate computational representations between classical and quantum pathways to preserve complementary multimodal information, while spatial modulation shields volumetric reconstruction from severe quantum bottleneck constraints?}
+
+The contributions of this study are structured as follows:
+\begin{enumerate}
+    \item \textbf{Resolution of Classical Collapse via Annealed Routing:} We introduce a piecewise linear annealed routing penalty that explicitly enforces pathway exploration during early training epochs before allowing the gating scalar $\alpha(x) \in [0, 1]$ to settle on an equilibrium allocation.
+    \item \textbf{Quantum-Conditioned Spatial Modulation:} To bypass the spatial reconstruction paradox without high-capacity unflattening layers, we implement Feature-wise Linear Modulation (FiLM) \cite{perez2018film}. Compact 8-dimensional quantum state measurements modulate classical 3D feature maps through affine scaling and shifting parameters, preserving spatial geometry in the classical CNN while incorporating global quantum conditioning.
+    \item \textbf{Strict Capacity-Matched Classical Controls:} We design parameter- and capacity-matched classical surrogate transformations possessing identical weight counts (24 parameters) and identical value bounds ($[-1, 1]$), ensuring exact 0.0000\% capacity variance between classical-quantum and classical-classical architectures.
+    \item \textbf{Empirical Multi-Modality Scaling on BraTS2021:} On a standardized 150-patient cohort from BraTS2021 \cite{baid2021rsna}, we evaluate scaling across $M \in \{1, 2, 3, 4\}$ physical MRI sequences (T1, T1ce, T2, FLAIR). We demonstrate that at $M=4$, classical pooling suffers a 4.41\% DSC degradation due to feature dilution, whereas adaptive routing maintains representation stability (+4.79\% DSC over classical baselines) through automated routing rebalancing.
+    \item \textbf{NISQ Hardware Noise Characterization:} We benchmark open-system gate depolarizing noise ($p \in [0.000, 0.050]$) on density-matrix simulators, demonstrating that adaptive routing provides structural buffering against physical hardware decoherence.
+\end{enumerate}

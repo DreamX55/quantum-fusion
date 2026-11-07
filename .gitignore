@@ -31,3 +31,13 @@ Thumbs.db
 # Windows Legacy Wrappers
 *.bat
 *.cmd
+
+# LaTeX Auxiliaries
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.synctex.gz
+*.fls
+*.fdb_latexmk
